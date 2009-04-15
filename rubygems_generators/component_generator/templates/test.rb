@@ -1,18 +1,14 @@
 require File.join(File.dirname(__FILE__), "test_generator_helper.rb")
 
-<% for requirement in superclass_requirement -%>
-require '<%= requirement %>'
-<% end -%>
-
 class Test<%= class_name %> < Test::Unit::TestCase
   include RubiGen::GeneratorTestHelper
 
   def setup
-    bare_setup
+    <%= setup_teardown_type %>_setup
   end
 
   def teardown
-    bare_teardown
+    <%= setup_teardown_type %>_teardown
   end
 
   # Some generator-related assertions:

@@ -119,6 +119,16 @@ module RubiGen
     def rubygems_teardown
       bare_teardown
     end
+
+    def rails_setup
+      bare_setup
+      Rails::Generator::Base.use_application_sources!
+      Rails::Generator::Scripts::Generate.new.run([APP_ROOT], :generator => 'app')
+    end
+
+    def rails_teardown
+      bare_teardown
+    end
   
     def bare_setup
       FileUtils.mkdir_p(APP_ROOT)

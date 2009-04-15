@@ -25,14 +25,18 @@ class ComponentGeneratorGenerator < RubiGen::Base
       # Generator stub
       m.template generator,              "#{path}/#{name}_generator.rb"
       m.template "test.rb",                   "test/test_#{name}_generator.rb"
-      m.file     "test_generator_helper.rb",  "test/test_generator_helper.rb"
+      m.template "test_generator_helper.rb",  "test/test_generator_helper.rb"
       m.file     "usage",                     "#{path}/USAGE"
       m.readme   'readme'
     end
   end
 
+  def generator_type_as_sym
+    generator_type.to_sym rescue nil
+  end
+
   def generator
-    case (generator_type.to_sym rescue nil)
+    case generator_type_as_sym
     when :rails
       "rails_generator.rb"
     else
@@ -41,7 +45,7 @@ class ComponentGeneratorGenerator < RubiGen::Base
   end
 
   def superclass_name
-    case (generator_type.to_sym rescue nil)
+    case generator_type_as_sym
     when :rails
       "Rails::Generator::NamedBase"
     else
@@ -49,12 +53,14 @@ class ComponentGeneratorGenerator < RubiGen::Base
     end
   end
 
-  def superclass_requirement
-    case (generator_type.to_sym rescue nil)
+  def setup_teardown_type
+    case generator_type_as_sym
     when :rails
-      ["rails_generator"]
+      "rails"
+    when :rubygems
+      "rubygems"
     else
-      []
+      "bare"
     end
   end
 

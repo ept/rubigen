@@ -5,7 +5,20 @@ rescue LoadError
 end
 require 'fileutils'
 
-# Must set before requiring generator libs.
+<%
+  if generator_type_as_sym == :rails
+  %># Load generator libs in the form needed for generating a new rails project
+gem 'rails'
+require 'rails/version'
+require 'rails_generator'
+require 'rails_generator/scripts/generate'
+
+# Configure the path of the temporary rails project in which our component
+# generators will be run in tests.<%
+  else
+  %># Must set before requiring generator libs.<%
+  end
+%>
 TMP_ROOT = File.dirname(__FILE__) + "/tmp" unless defined?(TMP_ROOT)
 PROJECT_NAME = "myproject" unless defined?(PROJECT_NAME)
 app_root = File.join(TMP_ROOT, PROJECT_NAME)
